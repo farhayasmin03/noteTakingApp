@@ -1,0 +1,22 @@
+body{
+    text-align: center
+    
+}
+#signup{
+    background-color:aqua;
+    height:40px;
+    width:120px;
+    padding:0px;
+    font-size:17px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+#takenote{
+    background-color:rgb(226, 240, 240);
+    height:40px;
+    width:120px;
+    padding:0px;
+    font-size:17px;
+    border-radius:10px;
+
+}

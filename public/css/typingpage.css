@@ -1,0 +1,20 @@
+
+  
+  textarea{
+    height: 700px;
+    width: 1000px;
+    font-size: 20px;
+    border: none;
+    background: #FFF;
+    resize: none;
+  }
+  #save{
+    vertical-align: top;
+    background-color:aqua;
+    height:40px;
+    width:120px;
+    padding:0px;
+    font-size:17px;
+    border-radius:10px;
+    margin:20px;
+  }
