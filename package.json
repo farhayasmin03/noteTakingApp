@@ -1,0 +1,22 @@
+{
+  "name": "notetakingapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farhayasmin03/noteTakingApp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farhayasmin03/noteTakingApp/issues"
+  },
+  "homepage": "https://github.com/farhayasmin03/noteTakingApp#readme",
+  "dependencies": {
+    "ejs": "^2.6.1"
+  }
+}

@@ -1,83 +1,136 @@
 var express = require('express');
+var {
+    check,
+    validationResult
+} = require('express-validator/check');
 var cuid = require('cuid');
-var test = cuid();
-console.log(test);
-var router = express.Router();
-var user = require('../models/user');
-var array=[];
+var User = require('../models/user');
+var LocalStrategy = require('passport-local').Strategy;
+
+module.exports = function (passport) {
+    var router = express.Router();
+    var user = require('../models/user');
+    var array = [];
     router.get("/", function (req, res) {
-        res.render('index')
+        res.render('index', { noteId: cuid() });
     });
-router.post('/note', function (req, res) {
-    res.render('typingpage')
-});
-router.post('/save', function (req, res) {
-    note = req.body.notes;
-    
-    
-    array.push(note);
-    console.log(array);
-    res.render('addtask',{array});
-
-});
- router.post('/add', function (req, res) {
-//     var newTask = req.body.newtask;
-    
-    
+    router.get('/note/:nodeId', function (req, res) {
+        res.render('typingpage')
+    });
+    router.get('/typingpage', function (req, res) {
+        res.render('typingpage')
+    });
+    router.get('/login', function (req, res) {
+        res.render('signup')
+    });
+    router.post('/save', function (req, res) {
+        note = req.body.notes;
 
 
+        array.push(note);
+        console.log(array);
+        res.render('addtask', {
+            array
+        });
 
- });
-router.post('/signup', function (req, res) {
-    res.render('signup')
-});
-router.post('/account', function (req, res) {
-    if (req.body.password !== req.body.confirmpassword) {
-        var err = new Error('Passwords do not match.');
-        err.status = 400;
-        res.send("passwords dont match");
-        return next(err);
-    }
-    if (req.body.name &&
-        req.body.email &&
-        req.body.username &&
-        req.body.password &&
-        req.body.confirmpassword) {
+    });
+    router.post('/add', function (req, res) {
+        //     var newTask = req.body.newtask;
 
-        var userData = {
-            name: req.body.name,
-            email: req.body.email,
-            username: req.body.username,
-            password: req.body.password,
-            confirmpassword: req.body.confirmpassword,
+
+
+
+
+    });
+    router.post('/signup', function (req, res) {
+        res.render('signup')
+    });
+    router.post('/register', function (req, res) {
+        let name = req.body.name;
+        let email = req.body.email;
+        let username = req.body.username;
+        let password = req.body.password;
+        let confirmpassword = req.body.confirmpassword;
+
+        const errors = {};
+
+        if (!name) {
+            errors.name = "Name is empty";
         }
-        User.create(userData, function (error, user) {
-            if (error) {
-                return next(error);
-            } else {
-                req.session.userId = user._id;
-                return res.redirect('/');
-            }
-        });
-    } else if (req.body.logemail && req.body.logpassword) {
-        User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
-            if (error || !user) {
-                var err = new Error('Wrong email or password.');
-                err.status = 400;
-                return next(err);
-            } else {
-                req.session.userId = user._id;
-                return res.redirect('/');
-            }
-        });
-    } else {
-        var err = new Error('All fields required.');
-        err.status = 401;
-        return next(err);
-        // res.send("All fields required.");
 
-        //console.log(err);
-    } // GET route after registering
+        if (!email) {
+            errors.email = "Email is empty";
+        }
+
+        if (Object.keys(errors).length > 0) {
+            return res.status(403).json({
+                errors: errors
+            });
+        }
+
+        let user = new User({
+            name: name,
+            email: email,
+            password: password,
+            username: username,
+            confirmpassword: confirmpassword
+        });
+
+        user.save((err, savedInstance) => {
+            if (err) {
+                return res.status(403).json({
+                    err: "Some data missing"
+                });
+            }
+            console.log(err, savedInstance);
+        });
+
+        // createUser(user, function(err, user){
+        //     if(err) throw err;
+        //     else console.log(user);
+        // });
+        req.flash('success_message', 'You have registered, Now please login');
+        res.redirect('/typingpage');
+    });
+    router.post('/login', passport.authenticate('local', {
+        successRedirect: '/typingpage',
+        failureRedirect: '/',
+        failureFlash: true
+    }));
+    passport.serializeUser(function (user, done) {
+        done(null, user.id);
+    });
+
+    passport.deserializeUser(function (id, done) {
+        User.findById(id, function (err, user) {
+            done(err, user);
+        });
+    });
+    passport.use(new LocalStrategy(
+        function (username, password, done) {
+            User.findOne({
+                username: username
+            }, function (err, user) {
+                if (err) {
+                    return done(err);
+                }
+                if (!user) {
+                    return done(null, false, {
+                        message: 'Incorrect username.'
+                    });
+                }
+                if (user.password === password) {
+                    return done(null, false, {
+                        message: 'Incorrect password.'
+                    });
+                }
+                return done(null, user);
+            });
+        }
+    ));
+
+
+    // GET route after registering
     router.get('/', function (req, res, next) {
         User.findById(req.session.userId)
             .exec(function (error, user) {
@@ -94,7 +147,5 @@ router.post('/account', function (req, res) {
                 }
             });
     });
-
-
-});
-module.exports = router;
+    return router;
+}

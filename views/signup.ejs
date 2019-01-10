@@ -12,7 +12,7 @@
 <body>
     <h2>Typekit</h2>
 
-    <form id="form1" method="POST" action='/account'>
+    <form id="form1" method="POST" action='/register'>
         <h3>Sign up</h3>
         Name:<input type="text" id="name" name="name"><br/>
         Email:<input type="text" id="email" name="email"><br/>
@@ -21,12 +21,28 @@
         Confirm <br/>password:<input type="password" id='confirmpassword' name="confirmpassword"><br/>
         <button id="account">Create account</button><br/>
     </form>
-    <form id="form2" method="POST" action='/account'>
+    <form id="form2" method="POST" action='/login'>
         <h3>Login</h3>
-        Username<input type="text" class="username" name="logemail"  ><br/>
-        Password<input type="password" class="password" name="logpassword"><br/>
+        Username<input type="text" class="username" name="username"  ><br/>
+        Password<input type="password" class="password" name="password"><br/>
         <button id="login"> Login</button>
     </form>
+    <%if (success_message != '') { %>
+        <div class="alert alert-success">
+            <%= success_message %>
+        </div>
+    <% } %>
+    <%if (error_message != '') { %>
+        <div class="alert alert-danger">
+            <%= error_message %>
+        </div>
+    <% } %>
+    <%if (error != '') { %>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
+    <% } %>
+    
 </body>
 
 </html>

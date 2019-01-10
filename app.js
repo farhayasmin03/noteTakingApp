@@ -1,10 +1,13 @@
 const http = require('http');
 var cuid = require('cuid');
 var test = cuid();
-console.log(test);
+var passport = require('passport');
+var flash = require('connect-flash');
+const LocalStrategy = require('passport-local').Strategy;
 const request = require('request');
 const port = 3000;
 var express = require('express');
+//var expressValidator = require('express-validator');
 
 var app = express();
 const bodyParser = require('body-parser');
@@ -40,8 +43,20 @@ app.use(session({
     //     mongooseConnection: db
     //   })
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+//app.use(expressValidator());
+app.use(flash());
+app.use(function(req, res, next){
+	res.locals.success_message = req.flash('success_message');
+	res.locals.error_message = req.flash('error_message');
+	res.locals.error = req.flash('error');
+	res.locals.user = req.user || null;
+  	next();
+});
 
-var routes = require('./routes/router');
+
+var routes = require('./routes/router')(passport);
 app.use('/', routes);
 
 
@@ -60,3 +75,4 @@ app.use(function (req, res, next) {
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!')
 });
+module.exports = app;
