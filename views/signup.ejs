@@ -12,19 +12,19 @@
 <body>
     <h2>Typekit</h2>
 
-    <form id="form1">
+    <form id="form1" method="POST" action='/account'>
         <h3>Sign up</h3>
-        Name:<input type="text" id="name"><br/>
-        Email:<input type="text" id="email"><br/>
-        Username:<input type="text" class="username"><br/>
-        Password:<input type="password" class="password"><br/>
-        Confirm <br/>password:<input type="password" id='confirmpassword'><br/>
+        Name:<input type="text" id="name" name="name"><br/>
+        Email:<input type="text" id="email" name="email"><br/>
+        Username:<input type="text" class="username" name="username"><br/>
+        Password:<input type="password" class="password" name="password"><br/>
+        Confirm <br/>password:<input type="password" id='confirmpassword' name="confirmpassword"><br/>
         <button id="account">Create account</button><br/>
     </form>
-    <form id="form2">
+    <form id="form2" method="POST" action='/account'>
         <h3>Login</h3>
-        Username<input type="text" class="username"><br/>
-        Password<input type="password" class="password"><br/>
+        Username<input type="text" class="username" name="logemail"  ><br/>
+        Password<input type="password" class="password" name="logpassword"><br/>
         <button id="login"> Login</button>
     </form>
 </body>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add Task</title>
+    <style type="text/css">
+        #addtask {
+            background-color: rgb(226, 240, 240);
+            height: 40px;
+            width: 120px;
+            padding: 0px;
+            font-size: 17px;
+            border-radius: 10px;
+
+        }
+
+        #list {
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Typekit</h1>
+    <form action="/add" method="POST">
+        <input type="text" name="newtask" placeholder="add new task" id="newtask"> <button id="addtask" value="Add"
+            onclick="Text2()"> Add Task </button>
+        <h2> Added Task </h2>
+
+        <ul id='list'>
+           <li><%= array %></li> 
+        </ul>
+
+
+    </form>
+    <script type="text/javascript">
+        function Text2() {
+            var li = document.createElement("LI");
+            var input = document.getElementById("newtask");
+            li.innerHTML = input.value;
+            input.value = "";
+
+            document.getElementById("list").appendChild(li);
+            
+        };
+    </script>
+
+
+</body>
+
+</html>
