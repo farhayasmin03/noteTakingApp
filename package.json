@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/farhayasmin03/noteTakingApp#readme",
   "dependencies": {
-    "ejs": "^2.6.1"
+    "ejs": "^2.6.1",
+    "passport-google-oauth": "^1.0.0"
   }
 }

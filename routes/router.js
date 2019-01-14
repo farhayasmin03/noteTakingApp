@@ -6,39 +6,75 @@ var {
 var cuid = require('cuid');
 var User = require('../models/user');
 var LocalStrategy = require('passport-local').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
 
 module.exports = function (passport) {
     var router = express.Router();
     var user = require('../models/user');
     var array = [];
     router.get("/", function (req, res) {
-        res.render('index', { noteId: cuid() });
+        res.render('index', {
+            noteId: cuid()
+        });
     });
     router.get('/note/:nodeId', function (req, res) {
         res.render('typingpage')
     });
-    router.get('/typingpage', function (req, res) {
+     router.get('/typingpage', function (req, res) {
+        res.render('addtask')
+    }); 
+     router.get('/save', function (req, res) {
         res.render('typingpage')
-    });
+    }); 
     router.get('/login', function (req, res) {
         res.render('signup')
     });
+    /* router.get('/save', function (req, res) {
+        res.render('typingpage')
+    }); */
+    
     router.post('/save', function (req, res) {
-        note = req.body.notes;
+       let notes = req.body.notes;
+       const errors1 = {};
 
-
-        array.push(note);
+         if (!notes) {
+       //let notes = req.body.notes;
+            errors1.name = "notes is empty";
+        }
+         
+         let user = new User({
+            notes: notes,
+            
+        });
+        if (Object.keys(errors1).length > 0) {
+            return res.status(403).json({
+                errors1: errors1
+            });
+        }
+        user.save((err, savedInstance) => {
+            /* if (err) {
+                return res.status(403).json({
+                    err: "Some data missing"
+                });
+            } */
+            console.log(err, savedInstance);
+            array.push(notes);
         console.log(array);
         res.render('addtask', {
             array
         });
-
+        });
+          
+        /* array.push(notes);
+        console.log(array);
+        res.render('addtask', {
+            array
+        }); */
+        
     });
     router.post('/add', function (req, res) {
-        //     var newTask = req.body.newtask;
-
-
-
+         var newTask = req.body.newtask;
+         console.log("added")
 
 
     });
@@ -61,6 +97,13 @@ module.exports = function (passport) {
         if (!email) {
             errors.email = "Email is empty";
         }
+        if (!username) {
+            errors.username = "username is empty";
+        }
+        if (password!==confirmpassword) {
+            errors= "password doesn't match";
+        }
+
 
         if (Object.keys(errors).length > 0) {
             return res.status(403).json({
@@ -84,13 +127,14 @@ module.exports = function (passport) {
             }
             console.log(err, savedInstance);
         });
+        res.redirect('/typingpage');
 
         // createUser(user, function(err, user){
         //     if(err) throw err;
         //     else console.log(user);
         // });
         req.flash('success_message', 'You have registered, Now please login');
-        res.redirect('/typingpage');
+        
     });
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/typingpage',
@@ -128,6 +172,18 @@ module.exports = function (passport) {
             });
         }
     ));
+//     router.get('/auth/google',
+//   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+//     passport.use(new GoogleStrategy({
+//         //consumerKey: "",
+//         //consumerSecret: "",
+//         callbackURL: "http://www.example.com/auth/google/callback"
+//       },function(token, tokenSecret, profile, done) {
+//         User.findOrCreate({ googleId: profile.id }, function (err, user) {
+//           return done(err, user);
+//         });
+//     }
+  //));
 
 
     // GET route after registering

@@ -20,11 +20,23 @@
         #list {
             font-size: 30px;
         }
+        #save{
+    vertical-align: top;
+    background-color:aqua;
+    height:40px;
+    width:120px;
+    padding:0px;
+    font-size:17px;
+    border-radius:10px;
+    margin:20px;
+  }
     </style>
 </head>
 
 <body>
     <h1>Typekit</h1>
+   
+
     <form action="/add" method="POST">
         <input type="text" name="newtask" placeholder="add new task" id="newtask"> <button id="addtask" value="Add"
             onclick="Text2()"> Add Task </button>
@@ -36,6 +48,7 @@
 
 
     </form>
+    <button id="save">Save</button>
     <script type="text/javascript">
         function Text2() {
             var li = document.createElement("LI");

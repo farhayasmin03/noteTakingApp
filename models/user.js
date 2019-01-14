@@ -21,6 +21,16 @@ var UserSchema = new mongoose.Schema({
   confirmpassword: {
     type: String,
     required: true,
+  },
+  notes:{
+    type: String,
+    required: true,
+
+  },
+  newTask:{
+    type: String,
+    required: true,
+
   }
 });
 

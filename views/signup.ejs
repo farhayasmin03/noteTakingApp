@@ -21,12 +21,19 @@
         Confirm <br/>password:<input type="password" id='confirmpassword' name="confirmpassword"><br/>
         <button id="account">Create account</button><br/>
     </form>
+    <p>
+             Login  OR Register with
+            <a class='google-btn' href='/auth/google'>
+                <h3>Google+</h3>
+            </a>
+        </p>
     <form id="form2" method="POST" action='/login'>
         <h3>Login</h3>
         Username<input type="text" class="username" name="username"  ><br/>
         Password<input type="password" class="password" name="password"><br/>
         <button id="login"> Login</button>
     </form>
+    
     <%if (success_message != '') { %>
         <div class="alert alert-success">
             <%= success_message %>
